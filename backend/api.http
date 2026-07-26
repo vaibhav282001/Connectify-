@@ -1,0 +1,76 @@
+### Register User
+POST http://localhost:9080/register
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "password": "securepassword123",
+    "email": "john.doe@example.com",
+    "name": "John Doe"
+}
+
+###
+
+### Login User
+POST http://localhost:9080/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "securepassword123"
+}
+
+###
+
+### Get User And Profile
+POST http://localhost:9080/get_user_and_profile
+Content-Type: application/json
+
+{
+    "token": "f11476e099a931c991d4540621dead2f2d86ced53b39144e56492740b98783227bbcc022b2b1b252febc27a9e28a4eb9fc7998e29e98e1a39cb236645135a044"
+}
+
+###
+
+### Update User Information
+POST http://localhost:9080/user_upload
+Content-Type: application/json
+
+{
+    "token": "f11476e099a931c991d4540621dead2f2d86ced53b39144e56492740b98783227bbcc022b2b1b252febc27a9e28a4eb9fc7998e29e98e1a39cb236645135a044",
+    "name": "John Updated",
+    "username": "john_updated",
+    "email": "john.updated@example.com"
+}
+
+###
+
+### Update Profile Data
+POST http://localhost:9080/update_profile_data
+Content-Type: application/json
+
+{
+    "token": "f11476e099a931c991d4540621dead2f2d86ced53b39144e56492740b98783227bbcc022b2b1b252febc27a9e28a4eb9fc7998e29e98e1a39cb236645135a044",
+    "bio": "Software Developer",
+    "currentPosition": "Full Stack Developer",
+    "pastWork": [
+        {
+            "companyName": "ABC Technologies",
+            "position": "Intern",
+            "years": "2024"
+        }
+    ]
+}
+
+###
+
+### Get All User Profiles
+GET http://localhost:9080/user/get_all_users
+
+###
+
+### Download Resume PDF
+GET http://localhost:9080/user/download_resume?id=6a292bb12083fbddfc2b4d6a
+
+
+###

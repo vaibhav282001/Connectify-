@@ -1,0 +1,190 @@
+import { clientServer } from "@/config";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { connection } from "next/server";
+
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (user, thunkAPI) => {
+    try {
+      const response = await clientServer.post(`/login`, {
+        email: user.email,
+        password: user.password,
+      });
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        return response.data;
+      } else {
+        return thunkAPI.rejectWithValue({
+          message: "Token not found in response",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      return thunkAPI.rejectWithValue({
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
+      });
+    }
+  },
+);
+
+export const registerUser = createAsyncThunk(
+  "user/register",
+  async (user, thunkAPI) => {
+    try {
+      const response = await clientServer.post("/register", {
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        name: user.name,
+      });
+
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || {
+          message: err.message,
+        },
+      );
+    }
+  },
+);
+
+export const getAboutUser = createAsyncThunk(
+  "user/getAboutUser",
+  async (user, thunkAPI) => {
+    try {
+      const response = await clientServer.get("/get_user_and_profile", {
+        params: {
+          token: user.token,
+        },
+      });
+
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || { message: err.message },
+      );
+    }
+  },
+);
+
+
+export const getAllUsers = createAsyncThunk(
+    "user/getAllUsers",
+    async (_, thunkAPI) => {
+        try {
+
+            const response = await clientServer.get("user/get_all_users")
+
+            return thunkAPI.fulfillWithValue(response.data)
+
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data)
+        }
+    }
+)
+
+
+export const sendConnectionRequest = createAsyncThunk(
+  "user/sendConnectionRequest",
+  async (user, thunkAPI) => {
+    try{
+      const response = await clientServer.post("/user/send_connection_request", {
+        token: user.token,
+        connectionId: user.user_id
+      });
+
+      // Refresh full connection state so pendingSent updates immediately
+      thunkAPI.dispatch(getMyConnectionRequests({ token: user.token }));
+
+      return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+
+    }
+  }
+)
+
+export const getConnetionRequest = createAsyncThunk(
+  "user/getConnetionRequest",
+  async (user, thunkAPI) => {
+    try{
+
+      const response = await clientServer.get("/user/getConnectionRequests", {
+
+        params: {
+          token: user.token
+        }
+      })
+      return thunkAPI.fulfillWithValue(response.data.connections);
+
+    } catch(error) {
+
+      console.log(error);
+
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+
+    }
+  }
+)
+
+export const getMyConnectionRequests = createAsyncThunk(
+  "user/getMyConnectionRequests",
+  async (user, thunkAPI) => {
+    try {
+      // This endpoint returns { pendingReceived, pendingSent, accepted }
+      const response = await clientServer.get("/user/getConnectionRequests", {
+        params: {
+          token: user.token
+        }
+      });
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+)
+
+export const AcceptConnection = createAsyncThunk(
+  "user/acceptConnection",
+  async (user, thunkAPI) => {
+    try {
+
+      const response = await clientServer.post("/user/accept_connection_request", {
+        token: user.token,
+        requestId: user.requestId,
+        action_type: user.action
+      });
+      return thunkAPI.fulfillWithValue(response.data);
+
+    } catch (error) {
+
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message)
+
+    }
+  }
+)
+
+export const updateProfileData = createAsyncThunk(
+  "user/updateProfileData",
+  async (profileData, thunkAPI) => {
+    try {
+      const response = await clientServer.post("/update_profile_data", {
+        token: localStorage.getItem("token"),
+        ...profileData
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
