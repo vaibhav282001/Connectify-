@@ -7,6 +7,7 @@ import fs from "fs";
 import ConnectionRequest from "../models/connections.model.js";
 import Comment from "../models/comments.model.js";
 import Post from "../models/posts.model.js";
+import { uploadToCloudinary } from "../config/cloudinary.js";
 
 const convertUserDataToPDF = async (userData) => {
 
@@ -15,7 +16,7 @@ const convertUserDataToPDF = async (userData) => {
     const outputPath = crypto.randomBytes(16).toString("hex") + ".pdf";
     const stream = fs.createWriteStream("uploads/" + outputPath);
     doc.pipe(stream);
-   if (userData.userId.profilePicture) {
+   if (userData.userId.profilePicture && !userData.userId.profilePicture.startsWith('http')) {
     doc.image(
         `uploads/${userData.userId.profilePicture}`,
         {
@@ -156,7 +157,8 @@ export const uploadProfilePicture = async (req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
-        user.profilePicture = req.file.filename;
+        const imageUrl = await uploadToCloudinary(req.file.buffer, 'profile_pictures');
+        user.profilePicture = imageUrl;
         await user.save();
 
         return res.json({ message: "Profile picture updated successfully" });
@@ -179,10 +181,11 @@ export const uploadProfileBanner = async (req, res) => {
             return res.status(400).json({ message: "No banner file provided" });
         }
 
-        user.profileBanner = req.file.filename;
+        const bannerUrl = await uploadToCloudinary(req.file.buffer, 'profile_banners');
+        user.profileBanner = bannerUrl;
         await user.save();
 
-        return res.json({ message: "Profile banner updated successfully", profileBanner: req.file.filename });
+        return res.json({ message: "Profile banner updated successfully", profileBanner: bannerUrl });
     } catch (error) {
         console.error("Error in update profile banner controller:", error);
         return res.status(500).json({ message: "Internal server error" });

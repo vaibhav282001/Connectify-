@@ -1,4 +1,4 @@
-import { BASE_URL, clientServer } from '@/config';
+import { getImageUrl, clientServer } from '@/config';
 import DashboardLayout from '@/layout/DashboardLayout';
 import UserLayout from '@/layout/UserLayout';
 import React, { useEffect, useState } from 'react';
@@ -120,7 +120,7 @@ export default function ViewProfilePage({ userProfile }) {
             {userProfile.userId?.profileBanner && (
               <img
                 className={styles.bannerImg}
-                src={`${BASE_URL}/${userProfile.userId.profileBanner}`}
+                src={getImageUrl(userProfile.userId.profileBanner)}
                 alt="Profile Cover Banner"
                 onError={(e) => {
                   e.target.style.display = "none";
@@ -129,7 +129,7 @@ export default function ViewProfilePage({ userProfile }) {
             )}
             <img
               className={styles.backDrop}
-              src={userProfile.userId?.profilePicture ? `${BASE_URL}/${userProfile.userId.profilePicture}` : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"}
+              src={userProfile.userId?.profilePicture ? getImageUrl(userProfile.userId.profilePicture) : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"}
               alt={userProfile.userId?.name}
               onError={(e) => {
                 e.target.src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80";
@@ -171,7 +171,7 @@ export default function ViewProfilePage({ userProfile }) {
                   onClick={async () => {
                     try {
                       const response = await clientServer.get(`/user/download_resume?id=${userProfile.userId?._id}`);
-                      window.open(`${BASE_URL}/${response.data.message}`, "_blank");
+                      window.open(getImageUrl(response.data.message), "_blank");
                     } catch (err) {
                       alert("Resume profile download not available.");
                     }
@@ -200,7 +200,7 @@ export default function ViewProfilePage({ userProfile }) {
                     <div className={styles.card}>
                       <div className={styles.card__profileContainer}>
                         {post.media ? (
-                          <img src={`${BASE_URL}/${post.media}`} alt="Transmission Attachment" />
+                          <img src={getImageUrl(post.media)} alt="Transmission Attachment" />
                         ) : (
                           <div style={{ width: "100%", height: "100%", background: "var(--glass-bg)" }}></div>
                         )}

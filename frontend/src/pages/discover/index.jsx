@@ -4,7 +4,7 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from '@/config/redux/action/authAction';
 import styles from "./index.module.css";
-import { BASE_URL } from "@/config";
+import { getImageUrl } from "@/config";
 import { useRouter } from 'next/router';
 
 function DiscoverPage() {
@@ -40,7 +40,7 @@ function DiscoverPage() {
                     >
                       <img 
                         className={styles.userCard__image} 
-                        src={profile.userId?.profilePicture ? `${BASE_URL}/${profile.userId.profilePicture}` : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"} 
+                        src={profile.userId?.profilePicture ? getImageUrl(profile.userId.profilePicture) : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"} 
                         alt={profile.userId?.name} 
                       />
                       <h2 className={styles.name}>{profile.userId?.name}</h2>

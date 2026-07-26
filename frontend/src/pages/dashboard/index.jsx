@@ -13,7 +13,7 @@ import { getAboutUser, getAllUsers } from "@/config/redux/action/authAction";
 import UserLayout from "@/layout/UserLayout";
 import DashboardLayout from "@/layout/DashboardLayout";
 import { setTokenIsThere } from "@/config/redux/reducer/authReducer";
-import { BASE_URL, clientServer } from "@/config";
+import { getImageUrl, clientServer } from "@/config";
 import styles from "./index.module.css";
 
 export default function Dashboard() {
@@ -205,7 +205,7 @@ export default function Dashboard() {
               {authState.profileFetched && authState.user?.userId?.profilePicture && (
                 <img
                   className={styles.composerAvatar}
-                  src={`${BASE_URL}/${authState.user.userId.profilePicture}`}
+                  src={getImageUrl(authState.user.userId.profilePicture)}
                   alt="Your profile"
                 />
               )}
@@ -253,7 +253,7 @@ export default function Dashboard() {
                       {post.userId?.profilePicture && (
                         <img
                           className={styles.postAvatar}
-                          src={`${BASE_URL}/${post.userId.profilePicture}`}
+                          src={getImageUrl(post.userId.profilePicture)}
                           alt={post.userId?.name ?? "User"}
                         />
                       )}
@@ -275,7 +275,7 @@ export default function Dashboard() {
                   {post.body && <p className={styles.postContent}>{post.body}</p>}
                   {post.media && (
                     <div className={styles.singleCard_image}>
-                      <img src={`${BASE_URL}/${post.media}`} alt="Attachment" />
+                      <img src={getImageUrl(post.media)} alt="Attachment" />
                     </div>
                   )}
 
@@ -333,7 +333,7 @@ export default function Dashboard() {
                                   {/* Comment header */}
                                   <div className={styles.inlineCommentHeader}>
                                     <img
-                                      src={comment.userId?.profilePicture ? `${BASE_URL}/${comment.userId.profilePicture}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userId?.name || "U")}&background=0d1117&color=00f0ff`}
+                                      src={comment.userId?.profilePicture ? getImageUrl(comment.userId.profilePicture) : `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userId?.name || "U")}&background=0d1117&color=00f0ff`}
                                       alt={comment.userId?.name}
                                       className={styles.inlineCommentAvatar}
                                       onClick={() => comment.userId?.username && router.push(`/view_profile/${comment.userId.username}`)}
@@ -387,7 +387,7 @@ export default function Dashboard() {
                                       {comment.replies.map((reply) => (
                                         <div key={reply._id} className={styles.replyCard}>
                                           <img
-                                            src={reply.userId?.profilePicture ? `${BASE_URL}/${reply.userId.profilePicture}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(reply.userId?.name || "U")}&background=0d1117&color=00f0ff`}
+                                            src={reply.userId?.profilePicture ? getImageUrl(reply.userId.profilePicture) : `https://ui-avatars.com/api/?name=${encodeURIComponent(reply.userId?.name || "U")}&background=0d1117&color=00f0ff`}
                                             alt={reply.userId?.name}
                                             className={styles.replyAvatar}
                                           />

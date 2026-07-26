@@ -2,6 +2,7 @@ import Profile from "../models/profile.model.js";
 import Post from "../models/posts.model.js";
 import User from "../models/user.model.js";
 import Comment from "../models/comments.model.js";
+import { uploadToCloudinary } from "../config/cloudinary.js";
 
 import bcrypt from 'bcrypt';
 
@@ -21,11 +22,18 @@ export const createPost = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        let mediaUrl = "";
+        let fileType = "";
+        if (req.file) {
+            mediaUrl = await uploadToCloudinary(req.file.buffer, 'posts');
+            fileType = req.file.mimetype.split("/")[1];
+        }
+
         const post = new Post({
             userId : user._id,
             body: req.body.body,
-            media: req.file != undefined ? req.file.filename : "",
-            fileType : req.file != undefined ? req.file.mimetype.split("/")[1] : ""
+            media: mediaUrl,
+            fileType : fileType
         })
 
         await post.save();

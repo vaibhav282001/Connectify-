@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { setTokenIsThere } from "@/config/redux/reducer/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyConnectionRequests, sendConnectionRequest, AcceptConnection, getAllUsers } from "@/config/redux/action/authAction";
-import { BASE_URL } from "@/config";
+import { getImageUrl } from "@/config";
 
 function DashboardLayout({ children }) {
   const router = useRouter();
@@ -92,7 +92,7 @@ function DashboardLayout({ children }) {
                 onClick={() => router.push("/profile")}
                 style={
                   authState.user.userId?.profileBanner
-                    ? { backgroundImage: `url(${BASE_URL}/${authState.user.userId.profileBanner})`, backgroundSize: "cover", backgroundPosition: "center" }
+                    ? { backgroundImage: `url(${getImageUrl(authState.user.userId.profileBanner)})`, backgroundSize: "cover", backgroundPosition: "center" }
                     : {}
                 }
               />
@@ -101,7 +101,7 @@ function DashboardLayout({ children }) {
                   className={styles.miniCardAvatar}
                   src={
                     authState.user.userId?.profilePicture
-                      ? `${BASE_URL}/${authState.user.userId.profilePicture}`
+                      ? getImageUrl(authState.user.userId.profilePicture)
                       : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
                   }
                   alt={authState.user.userId?.name}
@@ -205,7 +205,7 @@ function DashboardLayout({ children }) {
                       onClick={() => router.push(`/view_profile/${profile.userId?.username}`)}
                     >
                       <img
-                        src={profile.userId?.profilePicture ? `${BASE_URL}/${profile.userId.profilePicture}` : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"}
+                        src={profile.userId?.profilePicture ? getImageUrl(profile.userId.profilePicture) : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"}
                         alt={profile.userId?.name}
                         className={styles.profileAvatar}
                       />

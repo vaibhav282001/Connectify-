@@ -5,7 +5,7 @@ import { getAboutUser, updateProfileData } from "@/config/redux/action/authActio
 import { setTokenIsThere } from "@/config/redux/reducer/authReducer";
 import UserLayout from "@/layout/UserLayout";
 import DashboardLayout from "@/layout/DashboardLayout";
-import { BASE_URL, clientServer } from "@/config";
+import { getImageUrl, clientServer } from "@/config";
 import styles from "./style.module.css";
 import Head from "next/head";
 
@@ -239,7 +239,7 @@ export default function ProfilePage() {
     try {
       const response = await clientServer.get(`/user/download_resume?id=${authState.user.userId._id}`);
       if (response.data?.message) {
-        window.open(`${BASE_URL}/${response.data.message}`, "_blank");
+        window.open(getImageUrl(response.data.message), "_blank");
       } else {
         alert("Could not generate resume.");
       }
@@ -278,7 +278,7 @@ export default function ProfilePage() {
               {currentUser.userId?.profileBanner ? (
                 <img
                   className={styles.bannerImg}
-                  src={`${BASE_URL}/${currentUser.userId.profileBanner}`}
+                  src={getImageUrl(currentUser.userId.profileBanner)}
                   alt="Profile Banner"
                   onError={(e) => {
                     e.target.style.display = "none";
@@ -312,7 +312,7 @@ export default function ProfilePage() {
                   className={styles.avatar}
                   src={
                     currentUser.userId?.profilePicture
-                      ? `${BASE_URL}/${currentUser.userId.profilePicture}`
+                      ? getImageUrl(currentUser.userId.profilePicture)
                       : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
                   }
                   alt={currentUser.userId?.name}

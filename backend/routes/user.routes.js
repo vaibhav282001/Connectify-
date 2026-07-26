@@ -15,16 +15,7 @@ import { whatAreMyConnections } from '../controllers/user.controller.js';
 import { acceptConnectionRequest } from '../controllers/user.controller.js';
 const router = Router();
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.route("/update-profile-picture")
     .post(upload.single('profileImage'), uploadProfilePicture);

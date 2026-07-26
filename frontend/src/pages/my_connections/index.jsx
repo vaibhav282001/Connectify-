@@ -4,7 +4,7 @@ import DashboardLayout from '@/layout/DashboardLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMyConnectionRequests, AcceptConnection } from '@/config/redux/action/authAction';
 import { useRouter } from 'next/router';
-import { BASE_URL } from "@/config";
+import { getImageUrl } from "@/config";
 import styles from "./style.module.css";
 
 export default function MyConnectionsPage() {
@@ -114,7 +114,7 @@ export default function MyConnectionsPage() {
                     <div className={styles.card} key={req._id}>
                       <img 
                         className={styles.avatar} 
-                        src={req.userId?.profilePicture ? `${BASE_URL}/${req.userId.profilePicture}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(req.userId?.name || 'U')}&background=0d1117&color=00f0ff`}
+                        src={req.userId?.profilePicture ? getImageUrl(req.userId.profilePicture) : `https://ui-avatars.com/api/?name=${encodeURIComponent(req.userId?.name || 'U')}&background=0d1117&color=00f0ff`}
                         alt={req.userId?.name}
                         onClick={() => router.push(`/view_profile/${req.userId?.username}`)}
                       />
@@ -154,7 +154,7 @@ export default function MyConnectionsPage() {
                     <div className={styles.card} key={req._id}>
                       <img 
                         className={styles.avatar} 
-                        src={req.connectionId?.profilePicture ? `${BASE_URL}/${req.connectionId.profilePicture}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(req.connectionId?.name || 'U')}&background=0d1117&color=bd00ff`}
+                        src={req.connectionId?.profilePicture ? getImageUrl(req.connectionId.profilePicture) : `https://ui-avatars.com/api/?name=${encodeURIComponent(req.connectionId?.name || 'U')}&background=0d1117&color=bd00ff`}
                         alt={req.connectionId?.name}
                         onClick={() => router.push(`/view_profile/${req.connectionId?.username}`)}
                       />
@@ -195,7 +195,7 @@ export default function MyConnectionsPage() {
                       <div className={styles.card} key={conn._id}>
                         <img 
                           className={styles.avatar} 
-                          src={partner.profilePicture ? `${BASE_URL}/${partner.profilePicture}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'U')}&background=0d1117&color=00f0ff`}
+                          src={partner.profilePicture ? getImageUrl(partner.profilePicture) : `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'U')}&background=0d1117&color=00f0ff`}
                           alt={partner.name}
                           onClick={() => router.push(`/view_profile/${partner.username}`)}
                         />
